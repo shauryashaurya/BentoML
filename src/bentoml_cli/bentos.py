@@ -106,7 +106,7 @@ def bento_management_commands() -> click.Group:
             info = json.dumps(bento.info.to_dict(), indent=2, default=str)
             console.print_json(info)
         else:
-            info = yaml.dump(bento.info, indent=2, sort_keys=False)
+            info = yaml.dump(bento.info.to_dict(), indent=2, sort_keys=False)
             console.print(Syntax(info, "yaml", background_color="default"))
 
     @bentos.command(name="list")
@@ -394,7 +394,7 @@ def bento_management_commands() -> click.Group:
         from bentoml._internal.log import configure_logging
 
         if output == "tag":
-            set_quiet_mode(True)
+            set_quiet_mode()
             configure_logging()
 
         try:

@@ -69,6 +69,13 @@ In the above synchronous and asynchronous clients, requests are sent to the ``su
 
 In this example, the ``summarize`` method on the client is directly mapped to the ``summarize`` method in the ``Summarization`` Service. The data passed to the ``summarize`` method (``text="Your long text to summarize"``) conforms to the expected input of the Service.
 
+.. note::
+
+    If you deploy your Service to :doc:`BentoCloud </bentocloud/get-started>`, you can get the client of a Deployment by using ``get_client()`` or ``get_async_client()``. For more information, see :ref:`bentocloud/how-tos/call-deployment-endpoints:interact with the Deployment`.
+
+Use a context manager
+^^^^^^^^^^^^^^^^^^^^^
+
 To enhance resource management and reduce the risk of connection leaks, we recommend you create a client within a context manager as below.
 
 .. tab-set::
@@ -92,10 +99,6 @@ To enhance resource management and reduce the risk of connection leaks, we recom
             async with bentoml.AsyncHTTPClient('http://localhost:3000') as client:
                 summarized_text: str = await client.summarize(text="Your long text to summarize")
                 print(summarized_text)
-
-.. note::
-
-    If you deploy your Service to :doc:`BentoCloud </bentocloud/get-started>`, you can get the client of a Deployment by using ``get_client()`` or ``get_async_client()``. For more information, see :ref:`bentocloud/how-tos/call-deployment-endpoints:interact with the Deployment`.
 
 Check Service readiness
 -----------------------

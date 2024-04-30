@@ -33,6 +33,12 @@ This chapter introduces the key features of BentoML. We recommend you read :doc:
 
         Create an OCI-compliant image for your BentoML project and deploy it anywhere.
 
+    .. grid-item-card:: :doc:`/guides/workers`
+        :link: /guides/workers
+        :link-type: doc
+
+        Understand BentoML workers and how to configure them.
+
     .. grid-item-card:: :doc:`/guides/build-options`
         :link: /guides/build-options
         :link-type: doc
@@ -44,6 +50,18 @@ This chapter introduces the key features of BentoML. We recommend you read :doc:
         :link-type: doc
 
         Use the BentoML local Model Store to manage your models in a unified way.
+
+    .. grid-item-card:: :doc:`/guides/gpu-inference`
+        :link: /guides/gpu-inference
+        :link-type: doc
+
+        Configure GPUs to power your machine learning server with BentoML.
+
+    .. grid-item-card:: :doc:`/guides/model-composition`
+        :link: /guides/model-composition
+        :link-type: doc
+
+        Compose multiple models in your BentoML project.
 
     .. grid-item-card:: :doc:`/guides/distributed-services`
         :link: /guides/distributed-services
@@ -75,6 +93,12 @@ This chapter introduces the key features of BentoML. We recommend you read :doc:
 
         Enable adaptive batching to batch requests for reduced latency and optimized resource use.
 
+    .. grid-item-card:: :doc:`/guides/observability/index`
+        :link: /guides/observability/index
+        :link-type: doc
+
+        Understand observability in BentoML, including monitoring, logging, tracing, and metrics.
+
     .. grid-item-card:: :doc:`/guides/asgi`
         :link: /guides/asgi
         :link-type: doc
@@ -100,13 +124,17 @@ This chapter introduces the key features of BentoML. We recommend you read :doc:
     iotypes
     deployment
     containerization
+    workers
     build-options
     model-store
+    gpu-inference
+    model-composition
     distributed-services
     concurrency
     testing
     clients
     adaptive-batching
+    observability/index
     asgi
     configurations
     lifecycle-hooks

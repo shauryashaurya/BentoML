@@ -308,13 +308,12 @@ def get_bento_info(
         except NotFound:
             bento_schema = None
 
-        if bento_obj is None and bento_schema is None:
-            raise NotFound(f"bento {bento} not found in both local and cloud")
-        elif bento_obj is not None and bento_schema is None:
+        if bento_obj is not None:
             # push to bentocloud
             _cloud_client.push_bento(bento=bento_obj, context=context)
             return bento_obj.info
-        else:
+        if bento_schema is not None:
+            assert bento_schema.manifest is not None
             with Live(_cloud_client.spinner.progress_group):
                 _cloud_client.spinner.log_progress.add_task(
                     f"[bold blue]Using bento {bento.name}:{bento.version} from bentocloud to deploy"
@@ -324,6 +323,7 @@ def get_bento_info(
                 entry_service=bento_schema.manifest.entry_service,
                 service=bento_schema.manifest.service,
             )
+        raise NotFound(f"bento {bento} not found in both local and cloud")
     else:
         raise BentoMLException(
             "Create a deployment needs a target; project path or bento is necessary"
@@ -379,8 +379,8 @@ class DeploymentInfo:
             "created_at": self.created_at,
             "created_by": self.created_by,
             "config": (
-                self.get_config(refetch=False).to_dict(with_meta=False)
-                if self.get_config(refetch=False) is not None
+                config.to_dict(with_meta=False)
+                if (config := self.get_config(refetch=False)) is not None
                 else None
             ),
             "status": self.get_status(refetch=False).to_dict(),
@@ -453,12 +453,12 @@ class DeploymentInfo:
         from _bentoml_impl.client import SyncHTTPClient
 
         self._refetch()
-        if self._schema.status != DeploymentStatus.Running:
+        if self._schema.status != DeploymentStatus.Running.value:
             raise BentoMLException(f"Deployment status is {self._schema.status}")
         if self._urls is None or len(self._urls) != 1:
             raise BentoMLException("Deployment url is not ready")
 
-        return SyncHTTPClient(self._urls[0], media_type=media_type, token=token)
+        return SyncHTTPClient(self._urls[0], token=token)
 
     def get_async_client(
         self,
@@ -468,11 +468,11 @@ class DeploymentInfo:
         from _bentoml_impl.client import AsyncHTTPClient
 
         self._refetch()
-        if self._schema.status != DeploymentStatus.Running:
+        if self._schema.status != DeploymentStatus.Running.value:
             raise BentoMLException(f"Deployment status is {self._schema.status}")
         if self._urls is None or len(self._urls) != 1:
             raise BentoMLException("Deployment url is not ready")
-        return AsyncHTTPClient(self._urls[0], media_type=media_type, token=token)
+        return AsyncHTTPClient(self._urls[0], token=token)
 
     def wait_until_ready(
         self,
@@ -517,6 +517,7 @@ class DeploymentInfo:
                 action=f'[bold red]Time out waiting for Deployment "{self.name}" ready.[/bold red]',
             )
             spinner.spinner_progress.stop_task(spinner_task_id)
+            return
         else:
             while time.time() - start_time < timeout:
                 status = self.get_status()
@@ -530,9 +531,7 @@ class DeploymentInfo:
                 )
                 time.sleep(check_interval)
 
-        raise TimeoutError(
-            f"Timed out waiting for deployment '{self.name}' to be ready."
-        )
+        logger.error(f"Timed out waiting for deployment '{self.name}' to be ready.")
 
 
 @attr.define

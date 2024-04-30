@@ -134,7 +134,7 @@ class BentoCloudClient(CloudClient):
         if (
             not force
             and remote_bento
-            and remote_bento.upload_status == BentoUploadStatus.SUCCESS
+            and remote_bento.upload_status == BentoUploadStatus.SUCCESS.value
         ):
             self.spinner.log_progress.add_task(
                 f'[bold blue]Push skipped: Bento "{bento.tag}" already exists in remote Bento store'
@@ -269,7 +269,7 @@ class BentoCloudClient(CloudClient):
                 )
                 return
             finish_req = FinishUploadBentoSchema(
-                status=BentoUploadStatus.SUCCESS,
+                status=BentoUploadStatus.SUCCESS.value,
                 reason="",
             )
             try:
@@ -279,7 +279,7 @@ class BentoCloudClient(CloudClient):
                     )
                     if resp.status_code != 200:
                         finish_req = FinishUploadBentoSchema(
-                            status=BentoUploadStatus.FAILED,
+                            status=BentoUploadStatus.FAILED.value,
                             reason=resp.text,
                         )
                 else:
@@ -339,7 +339,7 @@ class BentoCloudClient(CloudClient):
                                 )
                                 if resp.status_code != 200:
                                     return FinishUploadBentoSchema(
-                                        status=BentoUploadStatus.FAILED,
+                                        status=BentoUploadStatus.FAILED.value,
                                         reason=resp.text,
                                     )
                                 return resp.headers["ETag"], chunk_number
@@ -391,10 +391,10 @@ class BentoCloudClient(CloudClient):
 
             except Exception as e:  # pylint: disable=broad-except
                 finish_req = FinishUploadBentoSchema(
-                    status=BentoUploadStatus.FAILED,
+                    status=BentoUploadStatus.FAILED.value,
                     reason=str(e),
                 )
-            if finish_req.status is BentoUploadStatus.FAILED:
+            if finish_req.status == BentoUploadStatus.FAILED.value:
                 self.spinner.log_progress.add_task(
                     f'[bold red]Failed to upload Bento "{bento.tag}"'
                 )
@@ -406,7 +406,7 @@ class BentoCloudClient(CloudClient):
                     version=version,
                     req=finish_req,
                 )
-            if finish_req.status != BentoUploadStatus.SUCCESS:
+            if finish_req.status != BentoUploadStatus.SUCCESS.value:
                 self.spinner.log_progress.add_task(
                     f'[bold red]Failed pushing Bento "{bento.tag}": {finish_req.reason}'
                 )
@@ -475,6 +475,7 @@ class BentoCloudClient(CloudClient):
         with tempfile.TemporaryDirectory() as temp_dir:
             # Download models to a temporary directory
             model_store = ModelStore(temp_dir)
+            assert remote_bento.manifest is not None
             with ThreadPoolExecutor(
                 max_workers=max(len(remote_bento.manifest.models), 1)
             ) as executor:
@@ -482,7 +483,9 @@ class BentoCloudClient(CloudClient):
                 def pull_model(model_tag: Tag):
                     model_download_task_id = (
                         self.spinner.transmission_progress.add_task(
-                            f'Pulling model "{model_tag}"', start=False, visible=False
+                            f'Pulling model "{model_tag}"',
+                            start=False,
+                            visible=False,
                         )
                     )
                     self._do_pull_model(
@@ -567,6 +570,7 @@ class BentoCloudClient(CloudClient):
                                 temp_fs.makedirs(p.parent.as_posix(), recreate=True)
                             temp_fs.writebytes(member.name, f.read())
                         bento = Bento.from_fs(temp_fs)
+                        assert remote_bento.manifest is not None
                         for model_tag in remote_bento.manifest.models:
                             with self.spinner.spin(
                                 text=f'Copying model "{model_tag}" to model store'
@@ -633,7 +637,7 @@ class BentoCloudClient(CloudClient):
         if (
             not force
             and remote_model
-            and remote_model.upload_status == ModelUploadStatus.SUCCESS
+            and remote_model.upload_status == ModelUploadStatus.SUCCESS.value
         ):
             self.spinner.log_progress.add_task(
                 f'[bold blue]Model "{model.tag}" already exists in remote model store, skipping'
@@ -725,7 +729,7 @@ class BentoCloudClient(CloudClient):
                 )
                 return
             finish_req = FinishUploadModelSchema(
-                status=ModelUploadStatus.SUCCESS,
+                status=ModelUploadStatus.SUCCESS.value,
                 reason="",
             )
             try:
@@ -735,7 +739,7 @@ class BentoCloudClient(CloudClient):
                     )
                     if resp.status_code != 200:
                         finish_req = FinishUploadModelSchema(
-                            status=ModelUploadStatus.FAILED,
+                            status=ModelUploadStatus.FAILED.value,
                             reason=resp.text,
                         )
                 else:
@@ -796,7 +800,7 @@ class BentoCloudClient(CloudClient):
                                 )
                                 if resp.status_code != 200:
                                     return FinishUploadModelSchema(
-                                        status=ModelUploadStatus.FAILED,
+                                        status=ModelUploadStatus.FAILED.value,
                                         reason=resp.text,
                                     )
                                 return resp.headers["ETag"], chunk_number
@@ -848,10 +852,10 @@ class BentoCloudClient(CloudClient):
 
             except Exception as e:  # pylint: disable=broad-except
                 finish_req = FinishUploadModelSchema(
-                    status=ModelUploadStatus.FAILED,
+                    status=ModelUploadStatus.FAILED.value,
                     reason=str(e),
                 )
-            if finish_req.status is ModelUploadStatus.FAILED:
+            if finish_req.status == ModelUploadStatus.FAILED.value:
                 self.spinner.log_progress.add_task(
                     f'[bold red]Failed to upload model "{model.tag}"'
                 )
@@ -864,7 +868,7 @@ class BentoCloudClient(CloudClient):
                     req=finish_req,
                 )
 
-            if finish_req.status != ModelUploadStatus.SUCCESS:
+            if finish_req.status != ModelUploadStatus.SUCCESS.value:
                 self.spinner.log_progress.add_task(
                     f'[bold red]Failed pushing model "{model.tag}" : {finish_req.reason}'
                 )

@@ -62,13 +62,7 @@ Here is an example:
 ``workers``
 ^^^^^^^^^^^
 
-``workers`` defines the process-level parallelism within a Service. It allows you to set the number of worker processes. This configuration is useful for optimizing performance, particularly for high-throughput or compute-intensive Services. ``workers`` defaults to ``1``.
-
-.. dropdown:: About BentoML workers
-
-    Under the hood, there are one or multiple workers within a BentoML Service. Workers refer to the processes that actually run the code logic within the Service. If a Service has multiple workers, it can process multiple requests concurrently. Using multiple workers (as separate processes) allows the Service to handle multiple requests concurrently without being limited by Python's Global Interpreter Lock (GIL).
-
-    Note that configuring too many workers in a BentoML Service can lead to inefficient memory utilization, as each worker independently loads model weights into memory. This can result in high memory consumption, particularly with large models. Additionally, in scenarios where model inference is performed outside the Python process and is thus not limited by the GIL, having too many workers may not significantly improve throughput or resource utilization.
+:doc:`/guides/workers` are the processes that run the code logic within a Service instance. You use ``workers`` in the ``@bentoml.service`` decorator to define the process-level parallelism within a Service. This configuration is useful for optimizing performance, particularly for high-throughput or compute-intensive Services. ``workers`` defaults to ``1``.
 
 To specify the number of workers (for example, ``3``) within a Service:
 
@@ -270,7 +264,7 @@ By customizing the ``http`` configuration, you can fine-tune how your BentoML Se
 ``monitoring``
 ^^^^^^^^^^^^^^
 
-``monitoring`` allows you to keep track of the performance and health of a Service for maintaining its reliability and efficiency.
+``monitoring`` allows you to collect logs and keep track of the performance and health of a Service for maintaining its reliability and efficiency. By default, BentoML provides a built-in monitoring mechanism, while you can customize it by setting a configuration file in YAML. For more information, see :doc:`/guides/observability/monitoring-and-data-collection`.
 
 .. code-block:: python
 
@@ -278,8 +272,8 @@ By customizing the ``http`` configuration, you can fine-tune how your BentoML Se
         "enabled": True,
         "type": "default",
         "options": {
-            "log_config_file": "path/to/log/file",
-            "log_path": "monitoring"
+            "log_config_file": "path/to/log_config.yaml", # A configuration file for customizing monitoring behavior, using Python's logging module
+            "log_path": "monitoring" # The directory where logs will be exported
         }
     })
     class MyService:

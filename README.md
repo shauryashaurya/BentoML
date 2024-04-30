@@ -1,13 +1,11 @@
 <div align="center">
   <img src="https://github.com/bentoml/BentoML/assets/489344/398274c1-a572-477b-b115-52497a085496" width="180px" alt="bentoml" />
-  <h1 align="center">BentoML: The Unified AI Application Framework</h1>
+  <h1 align="center">BentoML: The Unified Model Serving Framework</h1>
   <a href="https://pypi.org/project/bentoml"><img src="https://img.shields.io/pypi/v/bentoml.svg" alt="pypi_status" /></a>
   <a href="https://github.com/bentoml/BentoML/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://github.com/bentoml/bentoml/workflows/CI/badge.svg?branch=main" alt="CI" /></a>
   <a href="https://twitter.com/bentomlai"><img src="https://badgen.net/badge/icon/@bentomlai/1DA1F2?icon=twitter&label=Follow%20Us" alt="Twitter" /></a>
   <a href="https://join.slack.bentoml.org"><img src="https://badgen.net/badge/Join/Community/cyan?icon=slack" alt="Community" /></a>
-  <p>BentoML is a framework for building <b>reliable, scalable, and cost-efficient AI
-applications</b>. It comes with everything you need for model serving, application
-packaging, and production deployment.</p>
+  <p>BentoML is an open-source model serving library for building performant and scalable AI applications with Python. It comes with everything you need for serving optimization, model packaging, and production deployment.</p>
   <i><a href="https://l.bentoml.com/join-slack">👉 Join our Slack community!</a></i>
 </div>
 
@@ -65,7 +63,7 @@ packaging, and production deployment.</p>
 
 ### 🛠️ What you can build with BentoML
 
-- [OpenLLM](https://github.com/bentoml/OpenLLM) - An open platform for operating large language models (LLMs) in production.
+- [OpenLLM](https://github.com/bentoml/OpenLLM) - Run any open-source LLMs, such as Llama 2 and Mistral, as OpenAI compatible API endpoints, locally and in the cloud.
 - [BentoXTTS](https://github.com/bentoml/BentoXTTS) - Convert text to speech based on your custom audio data.
 - [BentoSDXLTurbo](https://github.com/bentoml/BentoSDXLTurbo) - Create an image generation application and run inference with a single step.
 - [BentoSD2Upscaler](https://github.com/bentoml/BentoSD2Upscaler) - Build an image generation application with upscaling capability.
@@ -77,6 +75,9 @@ packaging, and production deployment.</p>
 - [BentoLCM](https://github.com/bentoml/BentoLCM) - Deploy a REST API server for Stable Diffusion with Latent Consistency LoRAs.
 - [BentoSVD](https://github.com/bentoml/BentoSVD) - Create a video generation application powered by Stable Video Diffusion (SVD).
 - [BentoVLLM](https://github.com/bentoml/BentoVLLM) - Accelerate your model inference and improve serving throughput by using vLLM as your LLM backend.
+- [BentoBark](https://github.com/bentoml/BentoBark) - Generate highly realistic audio like music, background noise and simple sound effects with Bark.
+- [BentoYolo](https://github.com/bentoml/BentoYolo) - Build an object detection inference API server with YOLO.
+- [RAG](https://github.com/bentoml/rag-tutorials) - Self-host a RAG web service with BentoML step by step, including an embedding model, a large language model, and a vector database.
 
 # Getting started
 

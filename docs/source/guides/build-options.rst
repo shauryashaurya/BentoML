@@ -11,7 +11,7 @@ A Bento is a format containing all the components - source code, Python packages
       owner: bentoml-team
       project: gallery
     include:
-    - '*.py'
+      - '*.py'
     python:
       packages:
         - torch
@@ -106,11 +106,11 @@ When setting this field, you specify the file pathspecs (similar to ``.gitignore
 
     ...
     include:
-    - "data/"
-    - "**/*.py"
+      - "data/"
+      - "**/*.py"
     exclude:
-    - "tests/"
-    - "secrets.key"
+      - "tests/"
+      - "secrets.key"
 
 Alternatively, create a ``.bentoignore`` file in the ``build_ctx`` directory as follows:
 
@@ -127,6 +127,27 @@ Alternatively, create a ``.bentoignore`` file in the ``build_ctx`` directory as 
 
     ``exclude`` is always applied after ``include``.
 
+.. _build-options-model:
+
+``models``
+^^^^^^^^^^
+
+You can specify the model to be used for building a Bento using a string model tag or a dictionary. When you start from an existing project, you can download models from BentoCloud to your local :doc:`/guides/model-store` with the ``models`` configurations by running ``bentoml models pull``.
+
+See the following example for details. If you don't define models in ``bentofile.yaml``, the model specified in the Service is used to build the Bento.
+
+.. code-block:: yaml
+
+    models:
+      - "summarization-model:latest" # A string model tag
+      - tag: "summarization-model:version1" # A dictionary
+        filter: "label:staging"
+        alias: "summarization-model_v1"
+
+- ``tag``: The name and version of the model, separated by a colon.
+- ``filter``: This field uses the same filter syntax in BentoCloud. You use a filter to list specific models, such as the models with the same label. You can add multiple comma-separated filters to a model.
+- ``alias``: An alias for the model. If this is specified, you can use it directly in code like ``bentoml.models.get(alias)``.
+
 Python packages
 ^^^^^^^^^^^^^^^
 
@@ -137,7 +158,7 @@ BentoML will lock the package to the version available in the current environmen
 .. code-block:: yaml
 
     python:
-        packages:
+      packages:
         - "numpy"
         - "matplotlib==3.5.1"
         - "package>=0.2,<0.3"
@@ -155,7 +176,7 @@ file that defines Python packages for your project, you may also supply a path t
 .. code-block:: yaml
 
     python:
-        requirements_txt: "./project-a/ml-requirements.txt"
+      requirements_txt: "./project-a/ml-requirements.txt"
 
 Pip install options
 """""""""""""""""""
@@ -166,18 +187,18 @@ well as the ``requirements_txt`` file.
 .. code-block:: yaml
 
     python:
-        requirements_txt: "./requirements.txt"
-        index_url: "https://my.mirror.com/simple"
-        no_index: False
-        trusted_host:
+      requirements_txt: "./requirements.txt"
+      index_url: "https://my.mirror.com/simple"
+      no_index: False
+      trusted_host:
         - "pypi.python.org"
         - "my.mirror.com"
-        find_links:
+      find_links:
         - "https://download.pytorch.org/whl/cu80/stable.html"
-        extra_index_url:
+      extra_index_url:
         - "https://<other api token>:@my.mirror.com/pypi/simple"
         - "https://pypi.python.org/simple"
-        pip_args: "--pre -U --force-reinstall"
+      pip_args: "--pre -U --force-reinstall"
 
 .. note::
 
@@ -204,8 +225,8 @@ this behavior by setting the ``lock_packages`` field to ``false``:
 .. code-block:: yaml
 
     python:
-        requirements_txt: "requirements.txt"
-        lock_packages: false
+      requirements_txt: "requirements.txt"
+      lock_packages: false
 
 Python wheels
 """""""""""""
@@ -216,7 +237,7 @@ Bento. Simply provide a path to your ``.whl`` files under the ``wheels`` field.
 .. code-block:: yaml
 
     python:
-        wheels:
+      wheels:
         - ./lib/my_package.whl
 
 If the wheel is hosted on a local network without TLS, you can indicate
@@ -280,11 +301,11 @@ Conda dependencies can be specified under the ``conda`` field. For example:
 .. code-block:: yaml
 
     conda:
-        channels:
+      channels:
         - default
-        dependencies:
+      dependencies:
         - h2o
-        pip:
+      pip:
         - "scikit-learn==1.2.0"
 
 - ``channels``: Custom conda channels to use. If it is not specified, BentoML will use the community-maintained ``conda-forge`` channel as the default.
@@ -304,7 +325,7 @@ To add it in your ``bentofile.yaml``:
 .. code-block:: yaml
 
     conda:
-        environment_yml: "./environment.yml"
+      environment_yml: "./environment.yml"
 
 .. note::
 
@@ -328,13 +349,13 @@ The following ``docker`` field contains some basic Docker configurations:
 .. code-block:: yaml
 
     docker:
-        distro: debian
-        python_version: "3.8.12"
-        cuda_version: "11.6.2"
-        system_packages:
-          - libblas-dev
-          - liblapack-dev
-          - gfortran
+      distro: debian
+      python_version: "3.8.12"
+      cuda_version: "11.6.2"
+      system_packages:
+        - libblas-dev
+        - liblapack-dev
+        - gfortran
 
 .. note::
 
@@ -420,7 +441,7 @@ In the ``bentofile.yaml`` file:
     ...
     python:
       packages:
-          - nltk
+        - nltk
     docker:
       setup_script: "./setup.py"
 
